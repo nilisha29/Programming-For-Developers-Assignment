@@ -1,3 +1,22 @@
+// Problem Description:
+// Create a Tetris game using Java Swing, where players control falling blocks (Tetriminos) to form complete horizontal lines. 
+// When a line is filled, it disappears, and the player gains points. The game ends when blocks reach the top of the screen.
+
+// Objective:
+// 1) Implement core game mechanics (block movement, rotation, collision detection).
+// 2) Manage game state (score, speed increase, and game over).
+// 3) Provide user controls and visual feedback using Java Swing.
+
+// Approach:
+// 1) Game Board: Use a 2D array to represent the grid.
+// 2) Blocks: Represent Tetriminos as 2D arrays; handle movement and rotation.
+// 3) Collision Detection: Ensure blocks don’t overlap or go out of bounds.
+// 4) Row Clearing: Remove filled rows and shift others down.
+// 5) Speed Increase: Increase game speed as the score rises.
+// 6) Game Over: End the game when blocks reach the top.
+// 7) GUI: Use Java Swing to display the game board, score, and controls.
+
+
 import java.awt.*;
 import java.util.LinkedList;
 import java.util.Queue;

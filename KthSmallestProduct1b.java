@@ -1,18 +1,25 @@
-/*
-Algorithm: Find the Kth Smallest Product in Two Sorted Arrays
+// Problem Description:
+// You are given two sorted arrays, returns1 and returns2, representing the investment returns of two different portfolios. 
+// You need to determine the kth smallest product that can be achieved by selecting one element from each array and multiplying them together.
 
-1. Initialize a Min-Heap(Priority Queue) to store product values along with their indices.
-2. Insert Initial Elements: Push the product of each element in `returns1` with the first element in `returns2` into the heap.
-   - Store triplets `{product, index in returns1, index in returns2}`.
-3. Extracting  the K Smallest Products:
-   - Pop the smallest product from the heap `k` times.
-   - Store the extracted product as the latest result.
-   - If the extracted element's index from `returns2` has a next element, push the new product into the heap.
-4. Returning  the Kth Smallest Extracted Product.
+// Objective:
+// The goal is to find the kth smallest product formed by multiplying one element from returns1 with one element from returns2.
 
-Time Complexity: O(k log k)** (Efficient compared to brute-force `O(m * n log(m * n))`)
-Space Complexity: O(min(m, n))** (Heap stores at most `min(m, n)` elements)
-*/
+// Approach:
+// 1) Min-Heap (Priority Queue): We use a min-heap to efficiently track the smallest product combinations. The heap will store the products along 
+// with the indices of the elements from both arrays that created those products.
+
+// 2) Initialization: We start by inserting products formed by combining each element of returns1 with the first element of returns2 into the heap. 
+// This ensures that we can begin the process of finding the smallest products.
+
+// 3) Heap Extraction: The smallest product (top of the heap) is repeatedly extracted from the heap. After extracting the smallest product, the next 
+// possible combination of products, by increasing the index in returns2 (while keeping the same index in returns1), is added to the heap.
+
+// 4) Repeat k times: This process continues until we have extracted k products from the heap. The kth extracted product is the result.
+
+// 5) Time Complexity: This approach is efficient because each insertion and removal operation from the heap takes logarithmic time relative to the size
+// of the heap. Since the heap will contain at most m * n products (where m and n are the sizes of returns1 and returns2), the overall complexity is 
+// O(klog(min(m,n))).
 
 
 import java.util.PriorityQueue;

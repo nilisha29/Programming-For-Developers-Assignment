@@ -1,26 +1,24 @@
-/*
- * Problem given : Finding  the critical temperature 'f' with the minimum number of measurements.
-  
-  Given:
-  - 'k': Number of identical samples.
-  - 'n': Number of temperature levels.
-  - If a sample breaks at temperature 'x', it cannot be reused.
-  - If a sample does not break, it can be reused for further testing.
- 
-  Goal is to provide a way to:
-  - Minimize the number of measurements required to determine 'f'.
- 
- * Approach is to provide a way to calculate the number of measurement:
-  - If k = 1, perform a linear search (worst case: 'n' measurements).
-  - If k > 1, use dynamic programming:
-    - Define dp[k][m] as the maximum number of temperature levels we can check.
-    - Use the recurrence relation:
-        dp[k][m] = dp[k-1][m-1] + dp[k][m-1] + 1
-    - Increase 'm' until dp[k][m] >= n.
- 
-  
- */
+// Problem Description
+// You have a material that reacts when exposed to temperatures higher than a certain critical temperature f (where 0 ≤ f ≤ n). 
+// The goal is to determine f with the minimum number of tests.
+// You are given k identical samples of the material and n temperature levels. If a material sample reacts, it can no longer be used for 
+// further testing. If it remains unchanged, it can be reused.The challenge is to efficiently determine f while minimizing the number of tests.
 
+// Objective
+// The objective is to find the minimum number of measurements required to determine the critical temperature f, given k samples and n temperature 
+// levels.
+
+//Approach
+// The problem is solved using dynamic programming to find the minimum number of tests required to determine the critical temperature. 
+// We use a 2D DP table, where dp[k][n] represents the minimum tests needed with k samples and n temperature levels. 
+// The approach involves:
+
+// 1) Base Cases – If there’s only one sample, test sequentially; if there are no temperature levels, no tests are needed.
+// 2) Iterative Testing – For multiple samples, we strategically test at different temperature levels, considering both possibilities:
+//        If the sample reacts, the critical temperature is lower.
+//        If it does not react, the critical temperature is higher.
+// 3) Minimizing Worst-Case Tests – We take the worst scenario at each step and minimize the number of tests required using dynamic programming.
+// 4) Final Result – The solution ensures the critical temperature is found with the least number of tests in all cases.
 
 
 

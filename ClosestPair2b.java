@@ -1,3 +1,24 @@
+// Problem Description:
+// You are given two arrays, x_coords and y_coords, representing the x and y coordinates of points in a 2D plane. The task is to find the pair of 
+// points (one from each array) that are closest to each other based on the Manhattan distance.
+// Among all possible pairs, you need to return the lexicographically smallest pair of indices. A pair (i1, j1) is considered lexicographically 
+// smaller than (i2, j2) if i1 < i2 or if i1 == i2 and j1 < j2.
+
+// Objective:
+// •	Calculate the Manhattan distance between all possible pairs of points from the two arrays.
+// •	Find the pair of indices that results in the smallest Manhattan distance.
+// •	In case of ties, return the lexicographically smallest pair of indices.
+
+// Approach:
+// 1.	Brute-force Pair Comparison: Iterate through each pair of points from the two arrays and calculate their Manhattan distance.
+// 2.	Track Minimum Distance: Keep track of the smallest distance and the corresponding pair of indices.
+// 3.	Lexicographical Comparison: In case of multiple pairs having the same distance, choose the lexicographically smallest pair based on index 
+// comparison.
+
+// Time Complexity:
+// •The time complexity is O(n^2), where n is the length of the input arrays, as every pair of points is compared.
+
+
 public class ClosestPair2b { 
 
     // Function to find the lexicographically smallest pair of points with the smallest distance
@@ -37,4 +58,4 @@ public class ClosestPair2b {
     }
 }
 //Output:
-//Closest pair: [0, 3]
+//The indices of the closest pair of points are: [0, 3]

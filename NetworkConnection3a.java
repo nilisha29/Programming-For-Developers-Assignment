@@ -1,3 +1,29 @@
+// Problem Description:
+// You have a network of n devices, each with its own communication module installed at a cost defined by the array modules. Alternatively, 
+// devices can communicate with each other directly, with a cost specified by the array connections. The task is to determine the minimum total 
+// cost to connect all devices in the network.
+
+// The cost of connecting two devices is given by the connections array, where connections[j] = [device1, device2, cost] represents the cost to 
+// connect devices device1 and device2.
+
+// Objective:
+// Determine the minimum total cost to connect all devices in the network using communication modules and/or direct connections.
+
+// Approach:
+// 1) Graph Representation: Treat devices as nodes and the direct connections between them as edges. Each device can also have a virtual edge connecting
+//  it to a "super node" (node 0) with the cost of installing the communication module.
+
+// 2)Kruskal's Algorithm: Sort all edges (direct connections and module installation costs) by their cost.
+// Use Union-Find to efficiently manage the connected components and avoid cycles.
+// Add edges to the minimum spanning tree (MST) by connecting devices until all are connected.
+
+// 3) Union-Find: This data structure supports efficient find and union operations to keep track of connected components and ensure no cycles in the 
+// MST.
+
+// 4)Stop when all devices are connected: Once n edges are used (for n devices), the MST is complete, and the total cost is the minimum required to 
+// connect all devices.
+
+
 import java.util.*;
 
 public class NetworkConnection3a {

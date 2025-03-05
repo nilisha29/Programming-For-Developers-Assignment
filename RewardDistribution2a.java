@@ -1,3 +1,23 @@
+// Problem Description:
+// You are given an array of performance ratings for n employees. You need to assign rewards to these employees based on the following rules:
+
+// 1) Every employee must receive at least one reward.
+// 2) Employees with a higher rating must receive more rewards than their adjacent colleagues.
+// The goal is to determine the minimum number of rewards that need to be distributed while satisfying these conditions.
+
+// Objective:
+// Find the minimum number of rewards that need to be distributed according to the given rules.
+
+// Approach:
+// 1) Initial Setup: Start by initializing a rewards array with 1 for every employee (since every employee must get at least one reward).
+// 2) First Pass (Left to Right): Traverse the array from left to right. For each employee, if their rating is higher than the previous employee, give 
+// them one more reward than the previous employee.
+// 3) Second Pass (Right to Left): Traverse the array from right to left. For each employee, if their rating is higher than the next employee, update 
+// their reward to ensure they have more rewards than the next employee. Use Math.max() to ensure that the reward from the first pass isn't overwritten 
+// incorrectly.
+// 4) Total Rewards: Finally, sum up all the values in the rewards array to get the total number of rewards needed.
+// Time Complexity: The solution requires two passes through the ratings array, so the time complexity is O(n), where n is the number of employees.
+
 import java.util.Arrays;
 
 public class RewardDistribution2a { // Class name RewardDistribution 

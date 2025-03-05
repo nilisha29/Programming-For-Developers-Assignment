@@ -1,3 +1,28 @@
+// Problem Description:
+// You are given a graph where each node represents a location in a city, and each edge represents a road between two locations. 
+// Each location has a package (either 0 or 1), where 1 indicates a package is available to be collected. The objective is to determine the minimum number of roads you need to traverse to collect all packages and return to your starting location. You can move to an adjacent location and collect packages from locations within a distance of 2 from your current location.
+
+// Objective:
+// The goal is to find the minimum number of roads that must be traversed to collect all packages and return to the starting location. 
+// The result should consider the possibility of traversing the same roads multiple times.
+
+// Approach:
+// 1) Graph Representation: The city is represented as a graph where locations are nodes, and roads are edges.
+// Use an adjacency list to store the connections between locations.
+
+// 2) Depth-First Search (DFS): Start from each location, perform DFS to explore all possible paths while collecting packages.
+// Track the number of roads traversed and the number of packages collected along the way.
+
+// 3) Breadth-First Search (BFS): For each location, use BFS to calculate the shortest path to all other locations.
+// This ensures that we can efficiently calculate the number of roads to traverse to collect packages within a distance of 2.
+
+// 4) Package Collection: At each location, collect packages from locations within a distance of 2. Track the total number of packages collected.
+
+// 5) Backtracking: After collecting all packages, backtrack to the starting point while minimizing the number of roads traveled.
+
+// 6)Return the Minimum Roads: The final result is the minimum number of roads traversed to collect all packages and return to the starting location.
+
+
 import java.util.List;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -112,3 +137,5 @@ class Solution {
         System.out.println(solution.PackageCollection(packages, roads));
     }
 }
+
+//Output: 4
