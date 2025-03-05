@@ -1,103 +1,119 @@
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import java.util.concurrent.*;
-import java.util.regex.*;
 
-public class WebCrawler6b {
-    private final Set<String> visitedUrls = Collections.synchronizedSet(new HashSet<>()); // To store visited URLs
-    private final Queue<String> urlQueue = new ConcurrentLinkedQueue<>(); // Thread-safe queue for URLs
-    private final ExecutorService threadPool; // Thread pool for concurrent execution
+// Class A - Downloads content from a URL
+class CrawlerA extends Thread {
+    private String url; // URL to crawl
 
-    // Constructor: Initializes thread pool with N threads
-    public WebCrawler6b(int numThreads) {
-        threadPool = Executors.newFixedThreadPool(numThreads);
+    public CrawlerA(String url) {
+        this.url = url; // Assign URL
     }
 
-    // Function to start crawling
-    public void startCrawling(String startUrl, int maxPages) {
-        urlQueue.add(startUrl); // Add initial URL to queue
+    @Override
+    public void run() {
+        downloadPage(url); // Start downloading
+    }
 
-        while (!urlQueue.isEmpty() && visitedUrls.size() < maxPages) {
-            String url = urlQueue.poll(); // Get next URL
-            if (url == null || visitedUrls.contains(url)) {
-                continue; // Skip if already visited
-            }
-            visitedUrls.add(url); // Mark as visited
-            threadPool.execute(() -> crawl(url, maxPages)); // Submit URL for processing
-        }
-
-        // Shut down thread pool when all tasks are finished
-        threadPool.shutdown();
+    private void downloadPage(String urlString) {
         try {
-            threadPool.awaitTermination(10, TimeUnit.MINUTES); // Wait for all threads to complete
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-    }
-
-    // Function to crawl a single page
-    private void crawl(String url, int maxPages) {
-        try {
-            // Fetch page content
-            String htmlContent = fetchHtml(url);
-
-            // Extract URLs from the content
-            List<String> extractedUrls = extractUrls(htmlContent);
-
-            // Add new URLs to queue
-            for (String newUrl : extractedUrls) {
-                if (visitedUrls.size() >= maxPages) {
-                    break; // Stop if max pages reached
-                }
-                if (!visitedUrls.contains(newUrl)) {
-                    urlQueue.add(newUrl);
-                }
-            }
-
-            // Print crawled URL
-            System.out.println("Crawled: " + url);
-
-        } catch (IOException e) {
-            System.err.println("Failed to fetch: " + url);
-        }
-    }
-
-    // Function to fetch HTML content from a URL
-    private String fetchHtml(String urlString) throws IOException {
-        StringBuilder content = new StringBuilder();
-        URL url = new URL(urlString);
-        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-
-        // Set up HTTP request headers
-        connection.setRequestMethod("GET");
-        connection.setRequestProperty("User-Agent", "Mozilla/5.0"); // Simulate browser request
-
-        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            URL url = new URL(urlString); // Create URL object
+            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream())); // Open stream
             String line;
+            StringBuilder content = new StringBuilder(); // Store content
+
             while ((line = reader.readLine()) != null) {
-                content.append(line).append("\n"); // Append HTML content
+                content.append(line).append("\n"); // Read and append content
             }
+            reader.close(); // Close reader
+
+            saveToFile(urlString, content.toString()); // Save content to file
+            System.out.println("Crawled: " + urlString); // Print success message
+        } catch (Exception e) {
+            System.out.println("Failed to crawl: " + urlString + " - " + e.getMessage()); // Print error message
         }
-        return content.toString();
     }
 
-    // Function to extract URLs from HTML content using regex
-    private List<String> extractUrls(String htmlContent) {
-        List<String> urls = new ArrayList<>();
-        String regex = "href=[\"'](http[s]?://.*?)[\"']"; // Regex to find links
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(htmlContent);
-
-        while (matcher.find()) {
-            urls.add(matcher.group(1)); // Add found URL
+    private void saveToFile(String url, String content) {
+        try {
+            String filename = url.replaceAll("[^a-zA-Z0-9]", "_") + ".txt"; // Create filename
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filename)); // Open file writer
+            writer.write(content); // Write content to file
+            writer.close(); // Close writer
+        } catch (IOException e) {
+            System.out.println("Error saving file: " + e.getMessage()); // Print error message
         }
-        return urls;
+    }
+}
+
+// Class B - Another thread for downloading a different URL
+class CrawlerB extends Thread {
+    private String url; // URL to crawl
+
+    public CrawlerB(String url) {
+        this.url = url; // Assign URL
     }
 
-    // Main function to run the crawler
+    @Override
+    public void run() {
+        downloadPage(url); // Start downloading
+    }
+
+    private void downloadPage(String urlString) {
+        try {
+            URL url = new URL(urlString); // Create URL object
+            BufferedReader reader = new BufferedReader(new InputStreamReader(url.openStream())); // Open stream
+            String line;
+            StringBuilder content = new StringBuilder(); // Store content
+
+            while ((line = reader.readLine()) != null) {
+                content.append(line).append("\n"); // Read and append content
+            }
+            reader.close(); // Close reader
+
+            saveToFile(urlString, content.toString()); // Save content to file
+            System.out.println("Crawled: " + urlString); // Print success message
+        } catch (Exception e) {
+            System.out.println("Failed to crawl: " + urlString + " - " + e.getMessage()); // Print error message
+        }
+    }
+
+    private void saveToFile(String url, String content) {
+        try {
+            String filename = url.replaceAll("[^a-zA-Z0-9]", "_") + ".txt"; // Create filename
+            BufferedWriter writer = new BufferedWriter(new FileWriter(filename)); // Open file writer
+            writer.write(content); // Write content to file
+            writer.close(); // Close writer
+        } catch (IOException e) {
+            System.out.println("Error saving file: " + e.getMessage()); // Print error message
+        }
+    }
+}
+
+// Main class to start the crawler
+public class WebCrawler6b {
     public static void main(String[] args) {
-        WebCrawler6b crawler = new WebCrawler6b(5); // Create a crawler with 5 threads
-        crawler.startCrawling("https://example.com", 10); // Start crawling from example.com, max 10 pages
+        List<String> urls = Arrays.asList(
+                "https://www.example.com", // First URL
+                "https://www.wikipedia.org" // Second URL
+        );
+
+        // Creating threads for each URL
+        CrawlerA crawlerA = new CrawlerA(urls.get(0)); // Thread for first URL
+        CrawlerB crawlerB = new CrawlerB(urls.get(1)); // Thread for second URL
+
+        // Start threads
+        crawlerA.start(); // Start first thread
+        crawlerB.start(); // Start second thread
+
+        // Wait for threads to complete
+        try {
+            crawlerA.join(); // Wait for first thread
+            crawlerB.join(); // Wait for second thread
+        } catch (InterruptedException e) {
+            e.printStackTrace(); // Print error if interrupted
+        }
+
+        System.out.println("Crawling finished!"); // Print completion message
     }
 }
